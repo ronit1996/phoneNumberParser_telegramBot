@@ -3,30 +3,58 @@ import string
 def get_num(text):
 	"""This function parses phone numbers from text"""
 	table = str.maketrans("", "", string.punctuation)
-
 	final_output = []
-	# get the position of plus symbol
 	for line in text.splitlines():
-		for a in line.split():
+		normal_num = []
+		item_list = line.split()
+		for idx, a in enumerate(item_list):                                      # iterating through each words
 			if "+" in a:
+
+				# join numbers if it has spaces				                     # the number will either be written as 2+5+5
+				if "+91" in a and len(a.translate(table)) == 7:				     # or it'll be written as 5+5 so we are using different conditions to merge such cases
+					a = a + item_list[idx+1]
+
+				# get the pos of plus symbol
 				plus_pos = [pos for pos, char in enumerate(a) if char == "+"]
 				output = []
+
 				# remove the 91 and add extract numbers
 				num_list = list(a)
 				i = 0
 				while i != len(plus_pos):
-					del num_list[plus_pos[i] +1 - i*2]
-					del num_list[plus_pos[i] +1 - i*2]
+					del num_list[plus_pos[i] +1 - i*2]                           # adding 1 here and subtracting i*2 because everytime
+					del num_list[plus_pos[i] +1 - i*2]							 # the loop runs one item will get lesser, the 1 is added because we need to remove the 91 not +
 					i = i+1
 				output.append("".join(num_list).translate(table))
-				for count, item in enumerate(output):
+
+				# we are taking each number from the list and if the number
+				# has more than 10 digits then we are slicing the number and adding
+				# for example 0-10 is one number then 10-20 then 20-30 and so on
+				# the while loop will run as many phone numbers are there,
+				# we can get the count by dividing by 10
+				for item in output:
 					j = 0
 					while j < len(item)/10:
 						counter = 10*j
 						final_output.append(item[counter:counter+10])
 						j = j+1
-			elif a.isdigit():
-				final_output.append(a)
+
+			# for numbers that don't start with +91
+			else:
+				a = a.translate(table)
+				if len(a) > 4 and a.isdigit():
+					if len(item_list[idx-1]) == 8 and "+91" in item_list[idx-1]:
+						pass
+					else:
+						normal_num.append(a)
+		if len(normal_num) > 0:
+			temp_str = "".join(normal_num)
+			if len(temp_str) > 5:
+				j = 0
+				while j < len(temp_str)/10:
+					counter = 10*j
+					final_output.append(temp_str[counter:counter+10])
+					j = j+1
 
 	return final_output
 
