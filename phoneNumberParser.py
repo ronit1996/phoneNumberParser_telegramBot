@@ -71,11 +71,3 @@ def get_num(text):
 					j = j+1
 
 	return final_output
-
-
-# read the messages
-# with open("message.txt") as m:
-# 	text = m.read()
-#
-#
-# print(get_num(text))
