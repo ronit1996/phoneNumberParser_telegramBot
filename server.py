@@ -9,19 +9,21 @@ bot = Bot(token[0].strip())
 offset = ""
 while True:
     js = bot.get_updates(offset)
-
-    for item in js["result"]:
-        offset = item["update_id"]
-        message = bot.message
-        if message == "/start":
-            msg = "Hi, This is a bot, The bot helps you to parse phone numbers"\
-            " from messages that has numbers and texts."\
-            " This can only detect mobile phone numbers, not landline. The bot is in early"\
-            " development stage and might have bugs, if you find any bug or glitches"\
-            " send a message to - https://www.instagram.com/mr.monsterkoala/"
-            bot.send_message(msg, bot.id)
-        else:
-            nums = phoneNumberParser.get_num(message)
-            for num in nums:
-                msg = "call - {}\n\nwhatsapp - http://api.whatsapp.com/send?phone={}".format("91"+num, "91"+num)
+    try:
+        for item in js["result"]:
+            offset = item["update_id"]
+            message = bot.message
+            if message == "/start":
+                msg = "Hi, This is a bot, The bot helps you to parse phone numbers"\
+                " from messages that has numbers and texts."\
+                " This can only detect mobile phone numbers, not landline. The bot is in early"\
+                " development stage and might have bugs, if you find any bug or glitches"\
+                " send a message to - https://www.instagram.com/mr.monsterkoala/"
                 bot.send_message(msg, bot.id)
+            else:
+                nums = phoneNumberParser.get_num(message)
+                for num in nums:
+                    msg = "call - {}\n\nwhatsapp - http://api.whatsapp.com/send?phone={}".format("91"+num, "91"+num)
+                    bot.send_message(msg, bot.id)
+    except:
+        pass 

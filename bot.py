@@ -19,9 +19,12 @@ class Bot():
         data = json.loads(r.content)
 
         for item in data["result"]:
-            self.message = item['message']["text"]
-            self.id = item["message"]["from"]["id"]
-            self.name = item["message"]["from"]["first_name"]
+            try:
+                self.message = item['message']["text"]
+                self.id = item["message"]["from"]["id"]
+                self.name = item["message"]["from"]["first_name"]
+            except:
+                pass
 
         return data
 
