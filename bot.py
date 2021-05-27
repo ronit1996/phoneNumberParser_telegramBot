@@ -9,15 +9,19 @@ class Bot():
         self.id = 0
         self.name = ""
         self.command = False
+        self.username = ""
 
     def get_updates(self, offset=None):
         url = self.baseUrl + "getUpdates?timeout=100"
+
+        # add 1 with offset to get latest messages
         if offset:
             r = requests.get(url + "&offset={}".format(offset+1))
         else:
             r = requests.get(url)
         data = json.loads(r.content)
 
+        # used try and except because sometimes the json is empty
         for item in data["result"]:
             try:
                 self.message = item['message']["text"]
@@ -25,6 +29,11 @@ class Bot():
                 self.name = item["message"]["from"]["first_name"]
             except:
                 pass
+
+            try:
+                self.username = item["message"]["from"]["username"]
+            except:
+                self.username = "Not available"
 
         return data
 

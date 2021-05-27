@@ -1,6 +1,7 @@
 import bot
 from bot import Bot
 import phoneNumberParser
+import json
 
 with open("./token.txt") as t:
     token = t.readlines()
@@ -13,6 +14,9 @@ while True:
         for item in js["result"]:
             offset = item["update_id"]
             message = bot.message
+            # print necessary attributes
+            print(bot.name)
+            print(bot.username)
             if message == "/start":
                 msg = "Hi, This is a bot, The bot helps you to parse phone numbers"\
                 " from messages that has numbers and texts."\
@@ -25,5 +29,6 @@ while True:
                 for num in nums:
                     msg = "call - {}\n\nwhatsapp - http://api.whatsapp.com/send?phone={}".format("91"+num, "91"+num)
                     bot.send_message(msg, bot.id)
+                    print(msg)
     except:
-        pass 
+        pass
